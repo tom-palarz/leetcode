@@ -1,45 +1,31 @@
 package submissions
 
-import "fmt"
+/* O(m+n) time complexity and O(1) space complexity solution */
 
 func merge(nums1 []int, m int, nums2 []int, n int) {
-	if n == 0 {
-		return
-	}
 
-	ptr := &nums1
-	if m == 0 {
-		(*ptr) = append([]int(nil), nums2...)
-		fmt.Printf("m = 0; nums1: %v\n", nums1)
-		return
-	}
+	// Since the end of nums1 will be zeroes (for as long as nums2 is)
+	// and the arrays are already sorted, let's start from the back and move up
+	i := m - 1     // end of nums1 slice before the extra zeroes
+	j := n - 1     // end of nums2 slice
+	k := m + n - 1 // end of full nums1 array that has the zeroes
 
-	j := 0
-	for i := 0; i < m+n; i++ {
+	// Merge from the end while there are numbers to insert
+	for j >= 0 {
 
-		fmt.Printf("\n--------------\n")
-		fmt.Printf("i: %d, j: %d\n", i, j)
+		// if nums1 has elements remaining and the current element
+		// is bigger than end of nums2
+		if i >= 0 && nums1[i] > nums2[j] {
+			nums1[k] = nums1[i]
+			i--
 
-		if nums2[j] <= nums1[i] || (nums1[i] == 0 && i > m) {
-			fmt.Printf("======\ninsert\n")
-			fmt.Printf("i: %d, j: %d\n", i, j)
-			fmt.Printf("BEFORE nums1: %v ; nums2: %v\n", nums1, nums2)
-			//nums1 = slices.Concat(nums1[0:i], []int{nums2[j]}, nums1[i:m+n-1])
-			//tail := nums1[i+1:m+n-1]
-			var tail = make([]int, m+n-i-1)
-			copy(tail, nums1[i:m+n-1])
-			nums1 = append(nums1[0:i], nums2[j])
-			nums1 = append(nums1, tail...)
-			fmt.Printf("AFTER nums1: %v ; nums2: %v\n", nums1, nums2)
-			//i++
-			j++
-			fmt.Printf("NEW i: %d, j: %d\n", i, j)
-			if j == n {
-				break
-			}
+			// else, the current element from the end of nums2
+			// is bigger and should be inserted in the tail
+		} else {
+			nums1[k] = nums2[j]
+			j--
 		}
-
+		k-- // Move back in the merged array
 	}
-	fmt.Printf("End For Loop\n")
-	fmt.Printf("nums1: %v\n", nums1)
+
 }
