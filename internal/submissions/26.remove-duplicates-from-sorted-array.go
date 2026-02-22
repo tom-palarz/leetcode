@@ -1,6 +1,28 @@
 package submissions
 
+// more efficient solution doing the actual work in place
 func removeDuplicates(nums []int) int {
+
+	// the first element will always be unique, so count that one
+	// and start at the next one
+	k := 1
+
+	for i := 1; i < len(nums); i++ {
+
+		// if the current one we are looking at is unique, copy it
+		// into the unique placeholder position k and move the unique
+		// pointer up
+		if nums[i] != nums[k] {
+			nums[k] = nums[i]
+			k++
+		}
+	}
+
+	// return the unique placeholder count
+	return k
+}
+
+/* func removeDuplicates(nums []int) int {
 
 	unique := make([]int, len(nums))
 
@@ -32,4 +54,4 @@ func removeDuplicates(nums []int) int {
 	}
 
 	return ret
-}
+} */
